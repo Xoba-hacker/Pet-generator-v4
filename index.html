@@ -1,38 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Grow a Garden Pet Generator</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grow a Garden Pet Generator</title>
+<style>
+/* Body & background */
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 50px;
+  background-image: url('https://www.thegamer.com/wp-content/uploads/2025/05/roblox-grow-a-garden-complete-weather-guide.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: #fff;
+}
+
+/* Inputs & select */
+input, select {
+  padding: 10px;
+  margin: 10px 0;
+  font-size: 16px;
+  border-radius: 5px;
+  border: none;
+  transition: transform 0.2s;
+}
+input:hover, select:hover {
+  transform: scale(1.05);
+}
+
+/* Buttons */
+button {
+  padding: 10px 20px;
+  margin: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  background-color: #ff9900;
+  color: #fff;
+  font-weight: bold;
+  transition: transform 0.2s, background-color 0.2s;
+}
+button:hover {
+  transform: scale(1.1);
+  background-color: #ffb84d;
+}
+#joinServerBtn { background-color: #28a745; }
+#joinServerBtn:hover { background-color: #3cd75c; }
+
+/* Pet result */
+#petResult {
+  margin-top: 20px;
+  font-size: 22px;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px #000;
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+
+/* Pet image */
+#petImage img {
+  width: 120px;
+  height: 120px;
+  border-radius: 10px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+@keyframes bounceSparkle {
+  0% { transform: translateY(-30px) scale(0.8); filter: brightness(1) drop-shadow(0 0 0 #fff); }
+  25% { transform: translateY(10px) scale(1); filter: brightness(1.5) drop-shadow(0 0 10px #fff); }
+  50% { transform: translateY(-5px) scale(1); filter: brightness(1) drop-shadow(0 0 0 #fff); }
+  75% { transform: translateY(5px) scale(1); filter: brightness(1.5) drop-shadow(0 0 10px #fff); }
+  100% { transform: translateY(0) scale(1); filter: brightness(1) drop-shadow(0 0 0 #fff); }
+}
+
+/* Particles */
+.particles { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; z-index:0; }
+.particles span {
+  position:absolute;
+  display:block;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  opacity:0.8;
+  animation: floatUp linear infinite;
+}
+@keyframes floatUp {
+  0% { transform: translateY(100vh) scale(0.5); opacity:0.8; }
+  50% { opacity:1; }
+  100% { transform: translateY(-10vh) scale(1); opacity:0; }
+}
+
+/* Confetti */
+.confetti-container { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; z-index:1000; }
+.confetti {
+  position:absolute;
+  width:8px;
+  height:8px;
+  opacity:0.9;
+  transform:rotate(0deg);
+  animation: confettiFall linear forwards;
+}
+@keyframes confettiFall {
+  0% { transform: translateY(0) rotate(0deg); opacity:1; }
+  100% { transform: translateY(100vh) rotate(360deg); opacity:0; }
+}
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1>Grow a Garden Pet Generator</h1>
 
-    <!-- Roblox username input -->
-    <input type="text" id="usernameInput" placeholder="Enter your Roblox username">
+<div class="container">
+  <h1>Grow a Garden Pet Generator</h1>
 
-    <!-- Pet selection dropdown -->
-    <select id="petSelect">
-      <option value="">-- Choose your pet --</option>
-      <option value="Racoon">Racoon</option>
-      <option value="Dragonfly">Dragonfly</option>
-      <option value="Red Kitsune">Red Kitsune</option>
-      <option value="Disco Bee">Disco Bee</option>
-    </select>
+  <input type="text" id="usernameInput" placeholder="Enter your Roblox username">
 
-    <button id="generateBtn">Generate Pet</button>
+  <select id="petSelect">
+    <option value="">-- Choose your pet --</option>
+    <option value="Racoon">Racoon</option>
+    <option value="Dragonfly">Dragonfly</option>
+    <option value="Red Kitsune">Red Kitsune</option>
+    <option value="Disco Bee">Disco Bee</option>
+  </select>
 
-    <!-- Show Roblox profile -->
-    <div id="profile"></div>
+  <button id="generateBtn">Generate Pet</button>
 
-    <!-- Show pet -->
-    <div id="petResult"></div>
-    <div id="petImage"></div>
+  <div id="petResult"></div>
+  <div id="petImage"></div>
 
-    <button id="joinServerBtn" style="display:none;">Join Private Server</button>
-  </div>
-  <script src="script.js"></script>
+  <button id="joinServerBtn" style="display:none;">Join Private Server</button>
+</div>
+
+<!-- Floating particles -->
+<div class="particles"></div>
+
+<!-- Confetti -->
+<div class="confetti-container"></div>
+
+<script>
+const generateBtn = document.getElementById('generateBtn');
+const petResult = document.getElementById('petResult');
+const joinServerBtn = document.getElementById('joinServerBtn');
+const usernameInput = document.getElementById('usernameInput');
+const petSelect = document.getElementById('petSelect');
+const petImageDiv = document.getElementById('petImage');
+const robloxServerLink = 'https://www.roblox.com.am/games/126884695634066/Grow-a-Garden?privateServerLinkCode=52534889335897791035324107410840';
+
+const petImages = {
+  "Racoon": "https://i.imgur.com/1Racoon.png",
+  "Dragonfly": "https://i.imgur.com/2Dragonfly.png",
+  "Red Kitsune": "https://i.imgur.com/3RedKitsune.png",
+  "Disco Bee": "https://i.imgur.com/4DiscoBee.png"
+};
+
+// Floating particles
+const particlesContainer = document.querySelector('.particles');
+for (let i=0;i<50;i++){
+  const p=document.createElement('span');
+  p.style.left=Math.random()*100+'vw';
+  p.style.animationDuration=5+Math.random()*5+'s';
+  p.style.width=4+Math.random()*6+'px';
+  p.style.height=p.style.width;
+  p.style.background=`hsl(${Math.random()*360}, 80%, 90%)`;
+  p.style.opacity=Math.random();
+  particlesContainer.appendChild(p);
+}
+
+// Confetti function
+function generateConfetti(){
+  const confettiContainer=document.querySelector('.confetti-container');
+  const colors=['#ff0','#f0f','#0ff','#ff5733','#33ff57'];
+  for(let i=0;i<30;i++){
+    const c=document.createElement('div');
+    c.classList.add('confetti');
+    c.style.backgroundColor=colors[Math.floor(Math.random()*colors.length)];
+    c.style.left=Math.random()*100+'vw';
+    c.style.width=5+Math.random()*5+'px';
+    c.style.height=c.style.width;
+    c.style.animationDuration=2+Math.random()*2+'s';
+    confettiContainer.appendChild(c);
+    c.addEventListener('animationend',()=>c.remove());
+  }
+}
+
+// Generate pet
+generateBtn.addEventListener('click',()=>{
+  const username=usernameInput.value.trim();
+  const chosenPet=petSelect.value;
+  if(!username){alert('Please enter your Roblox username!');return;}
+  if(!chosenPet){alert('Please choose a pet!');return;}
+
+  // Username + pet
+  petResult.style.opacity=0;
+  petResult.textContent=`${username} got: ${chosenPet}!`;
+  void petResult.offsetWidth;
+  petResult.style.animation='fadeIn 0.5s forwards';
+
+  // Pet image with bounce + sparkle
+  petImageDiv.innerHTML=`<img src="${petImages[chosenPet]}" alt="${chosenPet}">`;
+  const petImg=petImageDiv.querySelector('img');
+  petImg.style.animation='none';
+  void petImg.offsetWidth;
+  petImg.style.animation='bounceSparkle 1s ease-in-out 0s 1';
+
+  // Show join server button
+  joinServerBtn.style.display='inline-block';
+
+  // Confetti
+  generateConfetti();
+});
+
+joinServerBtn.addEventListener('click',()=>{window.open(robloxServerLink,'_blank');});
+</script>
+
 </body>
 </html>
