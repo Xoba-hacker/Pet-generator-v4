@@ -3,178 +3,157 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grow a Garden Pet Generator</title>
+<title>Pet Generator Celebration</title>
 <style>
-/* Body & background */
 body {
   font-family: Arial, sans-serif;
+  color: #fff;
   text-align: center;
   padding: 50px;
-  background-image: url('https://www.thegamer.com/wp-content/uploads/2025/05/roblox-grow-a-garden-complete-weather-guide.jpg');
+  overflow: hidden;
+  position: relative;
+}
+
+/* Background and overlay */
+#bg {
+  position: fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: url('https://i.postimg.cc/cLxfhQpz/1756136219191.jpg') no-repeat center center;
   background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  color: #fff;
+  z-index: 0;
+}
+#overlay {
+  position: fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: rgba(0,0,0,0.3);
+  z-index: 1;
 }
 
-/* Inputs & select */
-input, select {
-  padding: 10px;
-  margin: 10px 0;
-  font-size: 16px;
-  border-radius: 5px;
-  border: none;
-  transition: transform 0.2s;
-}
-input:hover, select:hover {
-  transform: scale(1.05);
+/* Content */
+#content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 50px;
 }
 
-/* Buttons */
-button {
-  padding: 10px 20px;
+/* Pet buttons */
+.pet-button {
+  padding: 15px 25px;
   margin: 10px;
   font-size: 18px;
-  cursor: pointer;
-  border-radius: 5px;
-  border: none;
-  background-color: #ff9900;
-  color: #fff;
   font-weight: bold;
-  transition: transform 0.2s, background-color 0.2s;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, filter 0.2s;
+  color: #fff;
 }
-button:hover {
+.pet-button:hover {
   transform: scale(1.1);
-  background-color: #ffb84d;
+  filter: brightness(1.2);
 }
-#joinServerBtn { background-color: #28a745; }
-#joinServerBtn:hover { background-color: #3cd75c; }
+/* Pet colors */
+.racoon { background: #6b4226; }
+.dragonfly { background: #2a9d8f; }
+.redkitsune { background: #e63946; }
+.discobee { background: #f4d35e; }
+
+/* Generate and Join buttons - Big */
+#generateBtn, #joinServerBtn {
+  padding: 20px 40px;
+  font-size: 22px;
+  border-radius: 15px;
+  font-weight: bold;
+  background: linear-gradient(45deg,#ff9900,#ffcc00);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, filter 0.2s;
+  margin-top: 20px;
+}
+#generateBtn:hover, #joinServerBtn:hover {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
 
 /* Pet result */
-#petResult {
-  margin-top: 20px;
-  font-size: 22px;
-  font-weight: bold;
-  text-shadow: 1px 1px 2px #000;
-  opacity: 0;
-  animation: fadeIn 0.5s forwards;
-}
+#petResult { margin-top:20px; font-size:28px; font-weight:bold; opacity:0; position:relative; animation: fadeIn 0.5s forwards; }
+.colorful { background: linear-gradient(45deg,#ff0000,#ff9900,#ffff00,#00ff00,#00ffff,#0000ff,#ff00ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: hueRotate 3s linear infinite; }
+@keyframes hueRotate { 0%{filter:hue-rotate(0deg);}100%{filter:hue-rotate(360deg);} }
+@keyframes fadeIn { to{opacity:1;} }
 
-/* Pet image */
-#petImage img {
-  width: 120px;
-  height: 120px;
-  border-radius: 10px;
-}
-
-/* Animations */
-@keyframes fadeIn {
-  to { opacity: 1; }
-}
-@keyframes bounceSparkle {
-  0% { transform: translateY(-30px) scale(0.8); filter: brightness(1) drop-shadow(0 0 0 #fff); }
-  25% { transform: translateY(10px) scale(1); filter: brightness(1.5) drop-shadow(0 0 10px #fff); }
-  50% { transform: translateY(-5px) scale(1); filter: brightness(1) drop-shadow(0 0 0 #fff); }
-  75% { transform: translateY(5px) scale(1); filter: brightness(1.5) drop-shadow(0 0 10px #fff); }
-  100% { transform: translateY(0) scale(1); filter: brightness(1) drop-shadow(0 0 0 #fff); }
-}
-
-/* Particles */
-.particles { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; z-index:0; }
-.particles span {
-  position:absolute;
-  display:block;
-  width:6px;
-  height:6px;
-  border-radius:50%;
-  opacity:0.8;
-  animation: floatUp linear infinite;
-}
-@keyframes floatUp {
-  0% { transform: translateY(100vh) scale(0.5); opacity:0.8; }
-  50% { opacity:1; }
-  100% { transform: translateY(-10vh) scale(1); opacity:0; }
-}
-
-/* Confetti */
-.confetti-container { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; z-index:1000; }
-.confetti {
-  position:absolute;
-  width:8px;
-  height:8px;
-  opacity:0.9;
-  transform:rotate(0deg);
-  animation: confettiFall linear forwards;
-}
-@keyframes confettiFall {
-  0% { transform: translateY(0) rotate(0deg); opacity:1; }
-  100% { transform: translateY(100vh) rotate(360deg); opacity:0; }
-}
+/* Particles & Confetti */
+.confetti-container, .particles { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; z-index:2; }
+.particles span{position:absolute;width:6px;height:6px;border-radius:50%;opacity:0.8;background:hsl(0,100%,80%);animation:floatUp linear infinite;}
+@keyframes floatUp {0%{transform:translateY(100vh) scale(0.5);opacity:0.8;}50%{opacity:1;}100%{transform:translateY(-10vh) scale(1);opacity:0;}}
+.confetti{position:absolute;width:8px;height:8px;border-radius:50%;opacity:0.9;animation:confettiFall linear forwards;}
+@keyframes confettiFall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(100vh) rotate(360deg);opacity:0;}}
 </style>
 </head>
 <body>
 
-<div class="container">
-  <h1>Grow a Garden Pet Generator</h1>
+<div id="bg"></div>
+<div id="overlay"></div>
 
+<div id="content">
+  <h1>🎉 Grow-a-Garden Pet Generator 🎉</h1>
   <input type="text" id="usernameInput" placeholder="Enter your Roblox username">
 
-  <select id="petSelect">
-    <option value="">-- Choose your pet --</option>
-    <option value="Racoon">Racoon</option>
-    <option value="Dragonfly">Dragonfly</option>
-    <option value="Red Kitsune">Red Kitsune</option>
-    <option value="Disco Bee">Disco Bee</option>
-  </select>
+  <!-- Pet Buttons -->
+  <div id="petButtons">
+    <button class="pet-button racoon" data-pet="Racoon">Racoon 🦝</button>
+    <button class="pet-button dragonfly" data-pet="Dragonfly">Dragonfly 🐲</button>
+    <button class="pet-button redkitsune" data-pet="Red Kitsune">Red Kitsune 🐦‍🔥</button>
+    <button class="pet-button discobee" data-pet="Disco Bee">Disco Bee 🐝</button>
+  </div>
 
   <button id="generateBtn">Generate Pet</button>
 
   <div id="petResult"></div>
-  <div id="petImage"></div>
-
   <button id="joinServerBtn" style="display:none;">Join Private Server</button>
 </div>
 
-<!-- Floating particles -->
+<div class="confetti-container"></div>
 <div class="particles"></div>
 
-<!-- Confetti -->
-<div class="confetti-container"></div>
+<!-- Sounds -->
+<audio id="soundRacoon" src="https://www.soundjay.com/buttons/sounds/button-10.mp3"></audio>
+<audio id="soundDragonfly" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
+<audio id="soundRedKitsune" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
+<audio id="soundDiscoBee" src="https://www.soundjay.com/buttons/sounds/button-5.mp3"></audio>
 
 <script>
-const generateBtn = document.getElementById('generateBtn');
+const usernameInput = document.getElementById('usernameInput');
 const petResult = document.getElementById('petResult');
 const joinServerBtn = document.getElementById('joinServerBtn');
-const usernameInput = document.getElementById('usernameInput');
-const petSelect = document.getElementById('petSelect');
-const petImageDiv = document.getElementById('petImage');
+const generateBtn = document.getElementById('generateBtn');
+const confettiContainer = document.querySelector('.confetti-container');
+const particlesContainer = document.querySelector('.particles');
 const robloxServerLink = 'https://www.roblox.com.am/games/126884695634066/Grow-a-Garden?privateServerLinkCode=52534889335897791035324107410840';
-
-const petImages = {
-  "Racoon": "https://i.imgur.com/1Racoon.png",
-  "Dragonfly": "https://i.imgur.com/2Dragonfly.png",
-  "Red Kitsune": "https://i.imgur.com/3RedKitsune.png",
-  "Disco Bee": "https://i.imgur.com/4DiscoBee.png"
+const petSounds = {
+  "Racoon": document.getElementById('soundRacoon'),
+  "Dragonfly": document.getElementById('soundDragonfly'),
+  "Red Kitsune": document.getElementById('soundRedKitsune'),
+  "Disco Bee": document.getElementById('soundDiscoBee')
 };
 
 // Floating particles
-const particlesContainer = document.querySelector('.particles');
-for (let i=0;i<50;i++){
+for(let i=0;i<50;i++){
   const p=document.createElement('span');
   p.style.left=Math.random()*100+'vw';
-  p.style.animationDuration=5+Math.random()*5+'s';
   p.style.width=4+Math.random()*6+'px';
   p.style.height=p.style.width;
-  p.style.background=`hsl(${Math.random()*360}, 80%, 90%)`;
-  p.style.opacity=Math.random();
+  p.style.background=`hsl(${Math.random()*360},100%,75%)`;
+  p.style.animationDuration=5+Math.random()*5+'s';
   particlesContainer.appendChild(p);
 }
 
-// Confetti function
+// Confetti
 function generateConfetti(){
-  const confettiContainer=document.querySelector('.confetti-container');
-  const colors=['#ff0','#f0f','#0ff','#ff5733','#33ff57'];
+  const colors=['#ff0','#f0f','#0ff','#ff5733','#33ff57','#ff33aa'];
   for(let i=0;i<30;i++){
     const c=document.createElement('div');
     c.classList.add('confetti');
@@ -188,35 +167,58 @@ function generateConfetti(){
   }
 }
 
-// Generate pet
-generateBtn.addEventListener('click',()=>{
-  const username=usernameInput.value.trim();
-  const chosenPet=petSelect.value;
-  if(!username){alert('Please enter your Roblox username!');return;}
-  if(!chosenPet){alert('Please choose a pet!');return;}
+// Sparkles
+function generateSparkles(){
+  for(let i=0;i<20;i++){
+    const s=document.createElement('div');
+    s.classList.add('sparkle');
+    const x=(Math.random()*100-50)+'px';
+    const y=(Math.random()*50-25)+'px';
+    s.style.setProperty('--x',x);
+    s.style.setProperty('--y',y);
+    const rect=petResult.getBoundingClientRect();
+    s.style.left=(rect.left+rect.width/2)+'px';
+    s.style.top=(rect.top+rect.height/2)+'px';
+    document.body.appendChild(s);
+    s.addEventListener('animationend',()=>s.remove());
+  }
+}
 
-  // Username + pet
-  petResult.style.opacity=0;
-  petResult.textContent=`${username} got: ${chosenPet}!`;
-  void petResult.offsetWidth;
-  petResult.style.animation='fadeIn 0.5s forwards';
-
-  // Pet image with bounce + sparkle
-  petImageDiv.innerHTML=`<img src="${petImages[chosenPet]}" alt="${chosenPet}">`;
-  const petImg=petImageDiv.querySelector('img');
-  petImg.style.animation='none';
-  void petImg.offsetWidth;
-  petImg.style.animation='bounceSparkle 1s ease-in-out 0s 1';
-
-  // Show join server button
-  joinServerBtn.style.display='inline-block';
-
-  // Confetti
-  generateConfetti();
+// Track selected pet
+let selectedPet = null;
+document.querySelectorAll('.pet-button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    selectedPet = btn.dataset.pet;
+    document.querySelectorAll('.pet-button').forEach(b=>b.style.outline='none');
+    btn.style.outline='3px solid #fff';
+  });
 });
 
-joinServerBtn.addEventListener('click',()=>{window.open(robloxServerLink,'_blank');});
-</script>
+// Generate button click
+generateBtn.addEventListener('click', ()=>{
+  const username = usernameInput.value.trim();
+  if(!username){alert('Enter Roblox username!'); return;}
+  if(!selectedPet){alert('Select a pet first!'); return;}
+  petResult.textContent = `${username} got: ${selectedPet}!`;
+  petResult.className = 'colorful';
+  void petResult.offsetWidth;
+  petResult.style.animation='fadeIn 0.5s forwards';
+  joinServerBtn.style.display='inline-block';
+  generateConfetti();
+  generateSparkles();
+  if(petSounds[selectedPet]){petSounds[selectedPet].currentTime=0; petSounds[selectedPet].play();}
+});
 
+// Join server
+joinServerBtn.addEventListener('click', ()=>{window.open(robloxServerLink,'_blank');});
+
+// Interactive background
+const bg=document.getElementById('bg');
+document.addEventListener('mousemove',e=>{
+  const x=e.clientX/window.innerWidth;
+  const y=e.clientY/window.innerHeight;
+  bg.style.backgroundPosition=`${x*50}px ${y*50}px`;
+});
+</script>
 </body>
 </html>
