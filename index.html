@@ -10,39 +10,30 @@ body {
   color: #fff;
   text-align: center;
   padding: 50px;
-  overflow: hidden;
-  position: relative;
-}
-
-/* Background and overlay */
-#bg {
-  position: fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  background: url('https://i.postimg.cc/cLxfhQpz/1756136219191.jpg') no-repeat center center;
+  margin:0;
+  overflow-x: hidden;
+  background: url('https://i.postimg.cc/cLxfhQpz/1756136219191.jpg') no-repeat center center fixed;
   background-size: cover;
-  z-index: 0;
-}
-#overlay {
-  position: fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  background: rgba(0,0,0,0.3);
-  z-index: 1;
 }
 
 /* Content */
 #content {
   position: relative;
   z-index: 2;
-  text-align: center;
-  padding: 50px;
+}
+
+/* Pet buttons container in horizontal row */
+#petButtons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
 }
 
 /* Pet buttons */
 .pet-button {
   padding: 15px 25px;
-  margin: 10px;
   font-size: 18px;
   font-weight: bold;
   border-radius: 12px;
@@ -80,23 +71,13 @@ body {
 }
 
 /* Pet result */
-#petResult { margin-top:20px; font-size:28px; font-weight:bold; opacity:0; position:relative; animation: fadeIn 0.5s forwards; }
+#petResult { margin-top:20px; font-size:28px; font-weight:bold; opacity:0; transition: opacity 0.5s; }
 .colorful { background: linear-gradient(45deg,#ff0000,#ff9900,#ffff00,#00ff00,#00ffff,#0000ff,#ff00ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: hueRotate 3s linear infinite; }
 @keyframes hueRotate { 0%{filter:hue-rotate(0deg);}100%{filter:hue-rotate(360deg);} }
-@keyframes fadeIn { to{opacity:1;} }
 
-/* Particles & Confetti */
-.confetti-container, .particles { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; z-index:2; }
-.particles span{position:absolute;width:6px;height:6px;border-radius:50%;opacity:0.8;background:hsl(0,100%,80%);animation:floatUp linear infinite;}
-@keyframes floatUp {0%{transform:translateY(100vh) scale(0.5);opacity:0.8;}50%{opacity:1;}100%{transform:translateY(-10vh) scale(1);opacity:0;}}
-.confetti{position:absolute;width:8px;height:8px;border-radius:50%;opacity:0.9;animation:confettiFall linear forwards;}
-@keyframes confettiFall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(100vh) rotate(360deg);opacity:0;}}
 </style>
 </head>
 <body>
-
-<div id="bg"></div>
-<div id="overlay"></div>
 
 <div id="content">
   <h1>🎉 Grow-a-Garden Pet Generator 🎉</h1>
@@ -116,73 +97,12 @@ body {
   <button id="joinServerBtn" style="display:none;">Join Private Server</button>
 </div>
 
-<div class="confetti-container"></div>
-<div class="particles"></div>
-
-<!-- Sounds -->
-<audio id="soundRacoon" src="https://www.soundjay.com/buttons/sounds/button-10.mp3"></audio>
-<audio id="soundDragonfly" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
-<audio id="soundRedKitsune" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
-<audio id="soundDiscoBee" src="https://www.soundjay.com/buttons/sounds/button-5.mp3"></audio>
-
 <script>
 const usernameInput = document.getElementById('usernameInput');
 const petResult = document.getElementById('petResult');
 const joinServerBtn = document.getElementById('joinServerBtn');
 const generateBtn = document.getElementById('generateBtn');
-const confettiContainer = document.querySelector('.confetti-container');
-const particlesContainer = document.querySelector('.particles');
 const robloxServerLink = 'https://www.roblox.com.am/games/126884695634066/Grow-a-Garden?privateServerLinkCode=52534889335897791035324107410840';
-const petSounds = {
-  "Racoon": document.getElementById('soundRacoon'),
-  "Dragonfly": document.getElementById('soundDragonfly'),
-  "Red Kitsune": document.getElementById('soundRedKitsune'),
-  "Disco Bee": document.getElementById('soundDiscoBee')
-};
-
-// Floating particles
-for(let i=0;i<50;i++){
-  const p=document.createElement('span');
-  p.style.left=Math.random()*100+'vw';
-  p.style.width=4+Math.random()*6+'px';
-  p.style.height=p.style.width;
-  p.style.background=`hsl(${Math.random()*360},100%,75%)`;
-  p.style.animationDuration=5+Math.random()*5+'s';
-  particlesContainer.appendChild(p);
-}
-
-// Confetti
-function generateConfetti(){
-  const colors=['#ff0','#f0f','#0ff','#ff5733','#33ff57','#ff33aa'];
-  for(let i=0;i<30;i++){
-    const c=document.createElement('div');
-    c.classList.add('confetti');
-    c.style.backgroundColor=colors[Math.floor(Math.random()*colors.length)];
-    c.style.left=Math.random()*100+'vw';
-    c.style.width=5+Math.random()*5+'px';
-    c.style.height=c.style.width;
-    c.style.animationDuration=2+Math.random()*2+'s';
-    confettiContainer.appendChild(c);
-    c.addEventListener('animationend',()=>c.remove());
-  }
-}
-
-// Sparkles
-function generateSparkles(){
-  for(let i=0;i<20;i++){
-    const s=document.createElement('div');
-    s.classList.add('sparkle');
-    const x=(Math.random()*100-50)+'px';
-    const y=(Math.random()*50-25)+'px';
-    s.style.setProperty('--x',x);
-    s.style.setProperty('--y',y);
-    const rect=petResult.getBoundingClientRect();
-    s.style.left=(rect.left+rect.width/2)+'px';
-    s.style.top=(rect.top+rect.height/2)+'px';
-    document.body.appendChild(s);
-    s.addEventListener('animationend',()=>s.remove());
-  }
-}
 
 // Track selected pet
 let selectedPet = null;
@@ -201,24 +121,12 @@ generateBtn.addEventListener('click', ()=>{
   if(!selectedPet){alert('Select a pet first!'); return;}
   petResult.textContent = `${username} got: ${selectedPet}!`;
   petResult.className = 'colorful';
-  void petResult.offsetWidth;
-  petResult.style.animation='fadeIn 0.5s forwards';
+  petResult.style.opacity = 1;
   joinServerBtn.style.display='inline-block';
-  generateConfetti();
-  generateSparkles();
-  if(petSounds[selectedPet]){petSounds[selectedPet].currentTime=0; petSounds[selectedPet].play();}
 });
 
 // Join server
 joinServerBtn.addEventListener('click', ()=>{window.open(robloxServerLink,'_blank');});
-
-// Interactive background
-const bg=document.getElementById('bg');
-document.addEventListener('mousemove',e=>{
-  const x=e.clientX/window.innerWidth;
-  const y=e.clientY/window.innerHeight;
-  bg.style.backgroundPosition=`${x*50}px ${y*50}px`;
-});
 </script>
 </body>
 </html>
