@@ -3,22 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pet Generator</title>
+  <title>Grow a Garden Pet Generator</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h1>Pet Generator</h1>
+    <h1>Grow a Garden Pet Generator</h1>
 
     <!-- Roblox username input -->
     <input type="text" id="usernameInput" placeholder="Enter your Roblox username">
+
+    <!-- Pet selection dropdown -->
+    <select id="petSelect">
+      <option value="">-- Choose your pet --</option>
+      <option value="Racoon">Racoon</option>
+      <option value="Dragonfly">Dragonfly</option>
+      <option value="Red Kitsune">Red Kitsune</option>
+      <option value="Disco Bee">Disco Bee</option>
+    </select>
 
     <button id="generateBtn">Generate Pet</button>
 
     <!-- Show Roblox profile -->
     <div id="profile"></div>
 
+    <!-- Show pet -->
     <div id="petResult"></div>
+    <div id="petImage"></div>
+
     <button id="joinServerBtn" style="display:none;">Join Private Server</button>
   </div>
   <script src="script.js"></script>
