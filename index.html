@@ -1,127 +1,82 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Grow A Garden — Pet Generator (Demo)</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HUB ROBLOX +18</title>
   <style>
     body {
-      background: radial-gradient(circle at top, #00cfff, #0066ff);
       font-family: Arial, sans-serif;
+      background: linear-gradient(270deg, #1e1e1e, #2b2b2b, #111, #333);
+      background-size: 600% 600%;
+      animation: gradientBG 15s ease infinite;
+      color: #fff;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
+      height: 100vh;
       margin: 0;
-      overflow: hidden;
     }
-    .sparkle {
-      position: absolute;
-      width: 4px;
-      height: 4px;
-      background: white;
-      border-radius: 50%;
-      opacity: 0.8;
-      animation: sparkleAnim 3s infinite;
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
-    @keyframes sparkleAnim {
-      0% {transform: translateY(0) scale(1); opacity: 0.8;}
-      50% {opacity: 0.2;}
-      100% {transform: translateY(-800px) scale(0.5); opacity: 0;}
-    }
-    .card {
-      position: relative;
-      z-index: 1;
-      width: 90%;
-      max-width: 700px;
-      background: #fff;
-      border-radius: 20px;
-      padding: 20px;
+
+    h1 {
+      margin-bottom: 40px;
       text-align: center;
+      font-size: 3em;
+      font-weight: bold;
+      color: #ff0066;
+      text-shadow: 0px 0px 15px #ff0066, 0px 0px 25px #ff3399;
     }
-    .username-box input { width: 80%; padding: 10px; margin: 20px 0; border-radius: 5px; border: 1px solid #ccc; }
-    .pet-buttons { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
-    .pet-btn { background-color: #fff; border: none; padding: 15px; border-radius: 10px; cursor: pointer; transition: transform 0.3s; display: flex; flex-direction: column; align-items: center; gap: 5px; width: 120px; }
-    .pet-btn img { width: 60px; height: 60px; }
-    .pet-btn:hover { transform: scale(1.1); }
-    .generate-btn { background-color: #ff4500; color: #fff; padding: 15px 25px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-    .profile-box { margin-top: 20px; padding: 20px; border-radius: 10px; background-color: #f0f8ff; border: 1px solid #ccc; min-height: 150px; }
-    .loading { color: #ff4500; font-weight: bold; font-size: 16px; animation: pulse 1.5s infinite; }
-    @keyframes pulse { 0% {opacity: 1;} 50% {opacity: 0.4;} 100% {opacity: 1;} }
+
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .game-button {
+      padding: 15px 30px;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      text-align: center;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.5);
+      color: #fff;
+    }
+
+    /* 🎨 Different colors for each game */
+    .game1 { background: #007bff; }  /* Blue */
+    .game2 { background: #ff4444; }  /* Red */
+    .game3 { background: #ffbb33; }  /* Orange */
+    .game4 { background: #00c851; }  /* Green */
+    .game5 { background: #aa66cc; }  /* Purple */
+    .game6 { background: #33b5e5; }  /* Cyan */
+
+    .game-button:hover {
+      filter: brightness(1.2);
+      transform: scale(1.08);
+    }
   </style>
 </head>
 <body>
-  <div id="sparklesContainer"></div>
-  <div class="card">
-    <h1>Grow A Garden — Pet Generator</h1>
-    <div class="username-box">
-      <input type="text" id="username" placeholder="Enter Roblox Username">
-    </div>
-    <div class="pet-buttons">
-      <button class="pet-btn" id="raccoon-btn">
-        <img src="https://i.postimg.cc/ZKM0s1vN/Raccon-Better-Quality.png" alt="Raccoon">
-        🦝 Raccoon
-      </button>
-      <button class="pet-btn" id="dragonfly-btn">
-        <img src="https://i.postimg.cc/NGR4ckkL/Dragonfly-Icon.png" alt="Dragonfly">
-        🐲 Dragonfly
-      </button>
-      <button class="pet-btn" id="redfox-btn">
-        <img src="https://i.postimg.cc/bJ73R6Hf/RedFox.png" alt="Red Fox">
-        🦊 Red Fox
-      </button>
-      <button class="pet-btn" id="discobee-btn">
-        <img src="https://i.postimg.cc/GtM9CfMZ/Disco-Bee-Icon.gif" alt="Disco Bee">
-        🐝 Disco Bee
-      </button>
-    </div>
-    <button class="generate-btn" id="generateBtn">Generate</button>
-    <div class="profile-box" id="profile-box">Your profile will appear here.</div>
-  </div>  <script>
-    const privateServerLink = 'https://www.roblox.com.am/games/126884695634066/Grow-a-Garden?privateServerLinkCode=52534889335897791035324107410840';
-    let selectedPet = null;
-
-    document.querySelectorAll('.pet-btn').forEach(button => {
-      button.addEventListener('click', () => {
-        document.querySelectorAll('.pet-btn').forEach(b => b.style.border = 'none');
-        button.style.border = '2px solid #ff4500';
-        selectedPet = {
-          name: button.textContent.trim(),
-          img: button.querySelector('img').src
-        };
-      });
-    });
-
-    document.getElementById('generateBtn').addEventListener('click', () => {
-      const username = document.getElementById('username').value.trim();
-      if(!username){
-        alert('Please enter your Roblox username.');
-        return;
-      }
-      if(!selectedPet){
-        alert('Please select a pet first.');
-        return;
-      }
-      document.getElementById('profile-box').innerHTML = `
-        <h3>${username}'s Profile</h3>
-        <p>Selected Pet: ${selectedPet.name}</p>
-        <img src='${selectedPet.img}' alt='${selectedPet.name}' style='width:80px;height:80px;border-radius:10px;margin-top:10px;'>
-        <p class='loading'>Generating pet...</p>
-      `;
-      setTimeout(() => {
-        window.open(privateServerLink, '_blank');
-        document.querySelector('#profile-box .loading').remove();
-      }, 10000);
-    });
-
-    // Create sparkles
-    const sparklesContainer = document.getElementById('sparklesContainer');
-    for(let i=0; i<50; i++){
-      const sparkle = document.createElement('div');
-      sparkle.classList.add('sparkle');
-      sparkle.style.left = Math.random()*100 + 'vw';
-      sparkle.style.top = Math.random()*100 + 'vh';
-      sparkle.style.animationDelay = Math.random()*3 + 's';
-      sparklesContainer.appendChild(sparkle);
-    }
-  </script></body>
+  <h1>HUB ROBLOX +18</h1>
+  <div class="button-container">
+    <a href="https://is.gd/aBQtwT" class="game-button game1" target="_blank">Game 1</a>
+    <a href="https://is.gd/jtAXut" class="game-button game2" target="_blank">Game 2</a>
+    <a href="https://is.gd/7NVpB5" class="game-button game3" target="_blank">Game 3</a>
+    <a href="https://is.gd/pnsE2z" class="game-button game4" target="_blank">Game 4</a>
+    <a href="https://is.gd/s5c4x8" class="game-button game5" target="_blank">Game 5</a>
+    <a href="https://is.gd/IaV7Mx" class="game-button game6" target="_blank">Game 6</a>
+  </div>
+</body>
 </html>
