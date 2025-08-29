@@ -1,82 +1,177 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HUB ROBLOX +18</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(270deg, #1e1e1e, #2b2b2b, #111, #333);
-      background-size: 600% 600%;
-      animation: gradientBG 15s ease infinite;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HUB ROBLOX +18</title>
+<style>
+  /* Body & Background */
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+    font-family: 'Arial Black', sans-serif;
+    position: relative;
+    background: linear-gradient(-45deg, #ff0066, #00ffcc, #6600ff, #ffcc00);
+    background-size: 800% 800%;
+    animation: bgAnimation 20s ease infinite;
+    color: #fff;
+  }
 
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+  @keyframes bgAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
 
-    h1 {
-      margin-bottom: 40px;
-      text-align: center;
-      font-size: 3em;
-      font-weight: bold;
-      color: #ff0066;
-      text-shadow: 0px 0px 15px #ff0066, 0px 0px 25px #ff3399;
-    }
+  /* Background image overlay */
+  .bg-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url("https://i.postimg.cc/j285kpYd/file-00000000499861fd8061737aa2ba7335.png") no-repeat center center;
+    background-size: cover;
+    opacity: 0.08;
+    z-index: 0;
+  }
 
-    .button-container {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
+  /* Title */
+  h1 {
+    position: absolute;
+    top: 30px;
+    text-align: center;
+    font-size: 3em;
+    font-weight: bold;
+    color: #ff0066;
+    text-shadow: 0px 0px 15px #ff0066, 0px 0px 30px #ff3399, 0px 0px 45px #ff66cc;
+    animation: flicker 2s infinite alternate;
+    z-index: 1;
+  }
 
-    .game-button {
-      padding: 15px 30px;
-      font-size: 18px;
-      font-weight: bold;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      text-align: center;
-      box-shadow: 0px 4px 10px rgba(0,0,0,0.5);
-      color: #fff;
-    }
+  @keyframes flicker {
+    from { opacity: 1; }
+    to { opacity: 0.85; }
+  }
 
-    /* 🎨 Different colors for each game */
-    .game1 { background: #007bff; }  /* Blue */
-    .game2 { background: #ff4444; }  /* Red */
-    .game3 { background: #ffbb33; }  /* Orange */
-    .game4 { background: #00c851; }  /* Green */
-    .game5 { background: #aa66cc; }  /* Purple */
-    .game6 { background: #33b5e5; }  /* Cyan */
+  /* Subtitle */
+  h2 {
+    position: absolute;
+    top: 100px;
+    font-size: 1.4em;
+    font-weight: normal;
+    color: #00ffcc;
+    text-shadow: 0px 0px 8px #00ffcc, 0px 0px 15px #00ffff;
+    z-index: 1;
+  }
 
-    .game-button:hover {
-      filter: brightness(1.2);
-      transform: scale(1.08);
-    }
-  </style>
+  /* Buttons */
+  .button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 1;
+    margin-top: 200px;
+  }
+
+  .game-button {
+    padding: 20px 40px;
+    font-size: 20px;
+    font-weight: bold;
+    border: 3px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0px 0px 20px rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .game-button:hover {
+    transform: scale(1.15);
+    box-shadow: 0px 0px 35px currentColor;
+  }
+
+  /* Button colors */
+  .game1 { background: #007bff; }
+  .game2 { background: #ff4444; }
+  .game3 { background: #ffbb33; }
+  .game4 { background: #00c851; }
+  .game5 { background: #aa66cc; }
+  .game6 { background: #33b5e5; }
+
+  /* VPN note */
+  .note {
+    position: absolute;
+    bottom: 60px;
+    font-size: 1em;
+    color: #ffeb3b;
+    text-shadow: 0px 0px 8px #ffeb3b, 0px 0px 15px #ffaa00, 0px 0px 25px #ffcc00;
+    font-weight: bold;
+    text-align: center;
+    z-index: 2;
+    animation: blinkNote 2s infinite alternate;
+  }
+
+  @keyframes blinkNote {
+    from { opacity: 1; }
+    to { opacity: 0.4; }
+  }
+
+  /* Server owner note */
+  .bottom-note {
+    position: absolute;
+    bottom: 5px;
+    width: 100%;
+    font-size: 0.9em;
+    color: #00ffff;
+    text-shadow: 0px 0px 8px #00ffff, 0px 0px 15px #00ccff;
+    font-weight: bold;
+    text-align: center;
+    z-index: 2;
+  }
+
+  /* Responsive adjustments for very small screens */
+  @media screen and (max-width: 400px) {
+    h1 { font-size: 2.2em; top: 20px; }
+    h2 { font-size: 1.2em; top: 80px; }
+    .game-button { padding: 15px 25px; font-size: 16px; }
+    .button-container { margin-top: 150px; gap: 10px; }
+    .note { font-size: 0.85em; }
+    .bottom-note { font-size: 0.75em; }
+  }
+</style>
 </head>
 <body>
-  <h1>HUB ROBLOX +18</h1>
+  <!-- Background image -->
+  <div class="bg-image"></div>
+
+  <!-- Titles -->
+  <h1>🌟 HUB ROBLOX +18 🌟</h1>
+  <h2>Choose Your Game Below 🎮</h2>
+
+  <!-- Buttons (replace href with verified Roblox links) -->
   <div class="button-container">
-    <a href="https://roblox.com.fj/games/87709334915132/SNOW-Conveyor-in-neko-V16?privateServerLinkCode=30899621007022430096359243384010" class="game-button game1" target="_blank">Game 1</a>
-    <a href="https://roblox.com.fj/games/132560227965463/Neko-is-waiting-for-you-SHOP?privateServerLinkCode=30899621007022430096359243384010" class="game-button game2" target="_blank">Game 2</a>
-    <a href="https://roblox.com.fj/games/140349384867859/FREE-Kill-Neko-Girls?privateServerLinkCode=30899621007022430096359243384010" class="game-button game3" target="_blank">Game 3</a>
-    <a href="https://roblox.com.fj/games/115850813227792/Neko-infection-nuova-arma?privateServerLinkCode=30899621007022430096359243384010" class="game-button game4" target="_blank">Game 4</a>
-    <a href="https://roblox.com.fj/games/123314977146236/Steal-A-Neko?privateServerLinkCode=30899621007022430096359243384010" class="game-button game5" target="_blank">Game 5</a>
-    <a href="https://roblox.com.fj/games/113884845125261/NEKO-HUGS?privateServerLinkCode=30899621007022430096359243384010" class="game-button game6" target="_blank">Game 6</a>
+    <a href="https://www.roblox.com.by/games/88848566014743/AI-NPC-Friends?privateServerLinkCode=15596755783919022824570904192973" class="game-button game1" target="_blank">🎮 Game 1🍑💦</a
+    <a href="https://www.roblox.com.by/games/111892430388117/Wait-in-Line-for-Neko-Cake?privateServerLinkCode=15596755783919022824570904192973" class="game-button game3" target="_blank">🎮 Game 2🍑💦</a>
+    <a href="https://www.roblox.com.by/games/115708819367832/Neko-castle?privateServerLinkCode=15596755783919022824570904192973" class="game-button game4" target="_blank">🎮 Game 3🍑💦</a>
+    <a href="https://www.roblox.com.by/games/115708819367832/Neko-castle?privateServerLinkCode=15596755783919022824570904192973" class="game-button game5" target="_blank">🎮 Game 4🍑💦</a>
+    <a href="https://www.roblox.com.by/games/91349445108496/Complete-obby-to-meet-Neko-Girl?privateServerLinkCode=15596755783919022824570904192973" class="game-button game6" target="_blank">🎮 Gamea5🍑💦</a>
   </div>
+
+  <!-- Notes -->
+  <p class="note">⚠️ NOTE: Use VPN if the games don't load</p>
+  <p class="bottom-note">💬 Message the server owner if the game doesn’t load</p>
 </body>
 </html>
